@@ -1,14 +1,22 @@
 package day1
 
+import java.util.*
+import java.util.Comparator.reverseOrder
+
+
 object Day1 {
 
-    fun solvePart1(): Int {
-        var max = 0
-        var currentSum = 0
+    fun solvePart1(): Int = sumOfTop(1)
 
-        readInputLines().forEach {
+    fun solvePart2(): Int = sumOfTop(3)
+
+    private fun sumOfTop(n: Int): Int {
+        val maxValues = PriorityQueue<Int>(reverseOrder())
+
+        var currentSum = 0
+        readLines().forEach {
             if (it.isEmpty()) {
-                max = currentSum.coerceAtLeast(max)
+                maxValues.add(currentSum)
                 currentSum = 0
             }
             else {
@@ -16,25 +24,10 @@ object Day1 {
             }
         }
 
-        return max
+        return maxValues.take(n).sum()
     }
 
-    fun solvePart2(): Int {
-        val sums = mutableListOf<Int>(0)
-
-        readInputLines().forEach {
-            if (it.isEmpty()) {
-                sums.add(0)
-            }
-            else {
-                sums[sums.size - 1] += it.toInt()
-            }
-        }
-
-        sums.sort()
-
-        return sums.takeLast(3).sum()
-    }
-
-    private fun readInputLines() = Day1::class.java.getResource("/day1/input")!!.readText().lines()
+    private fun readLines() = Day1::class.java.getResourceAsStream("/day1/input")!!
+        .bufferedReader()
+        .lines()
 }

@@ -6,8 +6,8 @@ object Day1 {
         var max = 0
         var currentSum = 0
 
-        readInput().forEach {
-            if (it == "") {
+        readInputLines().forEach {
+            if (it.isEmpty()) {
                 max = currentSum.coerceAtLeast(max)
                 currentSum = 0
             }
@@ -21,15 +21,13 @@ object Day1 {
 
     fun solvePart2(): Int {
         val sums = mutableListOf<Int>(0)
-        var currentElfIdx = 0
 
-        readInput().forEach {
-            if (it == "") {
-                currentElfIdx++
+        readInputLines().forEach {
+            if (it.isEmpty()) {
                 sums.add(0)
             }
             else {
-                sums[currentElfIdx] += it.toInt()
+                sums[sums.size - 1] += it.toInt()
             }
         }
 
@@ -38,5 +36,5 @@ object Day1 {
         return sums.takeLast(3).sum()
     }
 
-    private fun readInput() = Day1::class.java.getResource("/day1/input")!!.readText().lines()
+    private fun readInputLines() = Day1::class.java.getResource("/day1/input")!!.readText().lines()
 }

@@ -6,7 +6,12 @@ import readLines
 object Day2 {
 
     fun solvePart1(): Int = readLines("/day2/input")
-        .mapToInt { calculateScore(decodeShape(it[0]), decodeMyShape(it[2])) }
+        .mapToInt {
+            calculateScore(
+                decodeShape(it[0]),
+                decodeMyShapeForPart1(it[2])
+            )
+        }
         .sum()
 
     fun solvePart2(): Int = readLines("/day2/input")
@@ -27,11 +32,5 @@ object Day2 {
     }
 
     private fun calculateScore(their: Shape, mine: Shape): Int =
-        (Shape.values().indexOf(mine) + 1) + findOutcome(their, mine).score
-
-    private fun findOutcome(their: Shape, mine: Shape): Outcome = when (mine) {
-        their -> DRAW
-        their.winner() -> WIN
-        else -> LOSE
-    }
+        mine.score + play(their, mine).score
 }

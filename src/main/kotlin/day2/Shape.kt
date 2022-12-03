@@ -1,17 +1,21 @@
 package day2
 
-enum class Shape(val encoded: Char, val encodedMine: Char, val winnerIdx: Int, val loserIdx: Int) {
-    ROCK('A', 'X', 1, 2),
-    PAPER('B', 'Y', 2, 0),
-    SCISSORS('C', 'Z', 0, 1);
+import day2.Shape.*
 
-    fun winner(): Shape = Shape.values()[this.winnerIdx]
-
-    fun loser(): Shape = Shape.values()[this.loserIdx]
+enum class Shape(val score: Int, val winnerIdx: Int, val loserIdx: Int) {
+    ROCK(1, 1, 2),
+    PAPER(2, 2, 0),
+    SCISSORS(3, 0, 1)
 }
 
-fun decodeShape(encoded: Char): Shape =
-    Shape.values().find { it.encoded == encoded }!!
+fun decodeShape(encoded: Char): Shape = when (encoded) {
+    'A' -> ROCK
+    'B' -> PAPER
+    else -> SCISSORS
+}
 
-fun decodeMyShape(encoded: Char): Shape =
-    Shape.values().find { it.encodedMine == encoded }!!
+fun decodeMyShapeForPart1(encoded: Char): Shape = when (encoded) {
+    'X' -> ROCK
+    'Y' -> PAPER
+    else -> SCISSORS
+}

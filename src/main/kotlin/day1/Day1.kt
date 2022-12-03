@@ -1,5 +1,6 @@
 package day1
 
+import readLines
 import java.util.*
 import java.util.Comparator.reverseOrder
 
@@ -14,7 +15,7 @@ object Day1 {
         val maxValues = PriorityQueue<Int>(reverseOrder())
 
         var currentSum = 0
-        readLines().forEach {
+        readLines("/day1/input").forEach {
             if (it.isEmpty()) {
                 maxValues.add(currentSum)
                 currentSum = 0
@@ -26,8 +27,4 @@ object Day1 {
 
         return maxValues.take(n).sum()
     }
-
-    private fun readLines() = Day1::class.java.getResourceAsStream("/day1/input")!!
-        .bufferedReader()
-        .lines()
 }

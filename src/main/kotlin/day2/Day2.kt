@@ -1,6 +1,5 @@
 package day2
 
-import day2.Outcome.*
 import readLines
 
 object Day2 {

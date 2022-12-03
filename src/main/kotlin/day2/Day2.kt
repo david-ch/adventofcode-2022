@@ -2,9 +2,11 @@ package day2
 
 import readLines
 
+private const val INPUT_FILE = "/day2/input"
+
 object Day2 {
 
-    fun solvePart1(): Int = readLines("/day2/input")
+    fun solvePart1(): Int = readLines(INPUT_FILE)
         .mapToInt {
             calculateScore(
                 decodeShape(it[0]),
@@ -13,7 +15,7 @@ object Day2 {
         }
         .sum()
 
-    fun solvePart2(): Int = readLines("/day2/input")
+    fun solvePart2(): Int = readLines(INPUT_FILE)
         .mapToInt {
             val their = decodeShape(it[0])
 

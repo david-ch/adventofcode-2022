@@ -25,12 +25,6 @@ object Day2 {
         }
         .sum()
 
-    private fun selectMine(their: Shape, desiredOutcome: Outcome): Shape = when (desiredOutcome) {
-        LOSE -> their.loser()
-        DRAW -> their
-        WIN -> their.winner()
-    }
-
     private fun calculateScore(their: Shape, mine: Shape): Int =
         mine.score + play(their, mine).score
 }

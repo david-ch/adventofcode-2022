@@ -1,10 +1,15 @@
 package day2
 
-enum class Outcome(val score: Int, val encoded: Char) {
-    LOSE(0, 'X'),
-    DRAW(3, 'Y'),
-    WIN(6, 'Z');
+import day2.Outcome.*
+
+enum class Outcome(val score: Int) {
+    LOSE(0),
+    DRAW(3),
+    WIN(6);
 }
 
-fun decodeOutcome(encoded: Char): Outcome =
-    Outcome.values().find { it.encoded == encoded }!!
+fun decodeOutcome(encoded: Char): Outcome = when (encoded) {
+    'X' -> LOSE
+    'Y' -> DRAW
+    else -> WIN
+}

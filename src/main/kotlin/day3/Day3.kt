@@ -21,7 +21,7 @@ object Day3 {
 
     private fun findSingleCommonItem(it: List<String>) =
         it.map { t -> indexItems(t) }
-            .reduce { a, b -> a.intersecion(b) }
+            .reduce { a, b -> a.intersection(b) }
             .getSingleIndexedItem()
 
     private fun getCompartments(rucksack: String): Pair<String, String> =

@@ -13,7 +13,7 @@ fun ItemIndex.addItem(item: Char) =
 fun ItemIndex.containsItem(item: Char) =
     this and (1L shl item - 'A') > 0
 
-fun ItemIndex.intersecion(anotherIndex: ItemIndex) =
+fun ItemIndex.intersection(anotherIndex: ItemIndex) =
     this and anotherIndex
 
 fun ItemIndex.getSingleIndexedItem(): Char {

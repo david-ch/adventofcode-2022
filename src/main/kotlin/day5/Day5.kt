@@ -5,6 +5,8 @@ import java.util.LinkedList
 import kotlin.math.ceil
 import kotlin.streams.asSequence
 
+private const val INPUT_FILE = "/day5/input"
+
 object Day5 {
 
     fun solvePart1(): String {
@@ -38,7 +40,7 @@ object Day5 {
     }
 
     private fun readCrateStacks(): Array<LinkedList<Char>> {
-        val stackLines = readLines("/day5/input")
+        val stackLines = readLines(INPUT_FILE)
             .takeWhile { !it.startsWith(" 1") }
             .map { readStacksLine(it) }
             .toList()
@@ -65,7 +67,7 @@ object Day5 {
     }
 
     private fun readInstructions(): List<Instruction> =
-        readLines("/day5/input")
+        readLines(INPUT_FILE)
             .asSequence()
             .filter { it.startsWith("move") }
             .map { parseInstruction(it) }

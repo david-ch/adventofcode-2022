@@ -2,97 +2,77 @@ package day7
 
 import readLines
 import java.util.LinkedList
+import kotlin.streams.asSequence
+
 
 object Day7 {
 
-    fun solvePart1(): Long {
-        var totalSizeOfSmallDirs = 0L
+    private interface ConsoleRecord
 
-        analyzeConsoleLog {
-            if (it <= 100000) {
-                totalSizeOfSmallDirs += it
-            }
-        }
-
-        return totalSizeOfSmallDirs
+    private enum class ChangeDirectory: ConsoleRecord {
+        IN, OUT
     }
+
+    private data class Filesize(val size: Long): ConsoleRecord
+
+    fun solvePart1() = folderSizes()
+        .filter { it <= 100000 }
+        .sum()
 
     fun solvePart2(): Long {
         val totalDiskSize = 70000000
         val updateRequires = 30000000
         val spaceToFree = updateRequires + getTotalDiskUsed() - totalDiskSize
 
-        var smallestSuitableDirSize = Long.MAX_VALUE
-
-        analyzeConsoleLog {
-            if (it in spaceToFree..smallestSuitableDirSize) {
-                smallestSuitableDirSize = it
-            }
-        }
-
-        return smallestSuitableDirSize
+        return folderSizes()
+            .filter { it >= spaceToFree }
+            .min()
     }
 
-    private fun getTotalDiskUsed(): Long {
-        var largest = 0L
+    private fun getTotalDiskUsed() = folderSizes().max()
 
-        analyzeConsoleLog {
-            if (it > largest) {
-                largest = it
-            }
-        }
+    private fun folderSizes() = readLines("/day7/input")
+        .filter { isMeaningfulRecord(it) }
+        .map { toRecord(it) }
+        .asSequence()
+        .calculateFoldersSizes()
 
-        return largest
+    private fun isMeaningfulRecord(line: String) =
+        line != "$ ls" && !line.startsWith("dir ") && line != "$ cd /"
+
+    private fun toRecord(line: String): ConsoleRecord = when {
+        line == "$ cd .." -> ChangeDirectory.OUT
+        line.startsWith("$ cd") -> ChangeDirectory.IN
+        else -> Filesize(line.split(" ")[0].toLong())
     }
 
-    private fun analyzeConsoleLog(consumeDirectorySize: (Long) -> Unit) {
-        val analyser = DiskUsageAnalyser(consumeDirectorySize)
+    private fun calculatingFoldersSizes(consoleRecords: Sequence<ConsoleRecord>): Sequence<Long> = sequence {
+        val currentPathSizes = LinkedList<Long>()
+        currentPathSizes.add(0)
 
-        readLines("/day7/input").forEach {
-            when {
-                it.startsWith("$ cd") -> {
-                    when (it.substring(5)) {
-                        "/" -> analyser.goToRoot()
-                        ".." -> analyser.goOut()
-                        else -> analyser.goIn()
-                    }
-                }
-                it != "$ ls" && !it.startsWith("dir ") -> {
-                    analyser.noticeFile(it.split(" ")[0].toLong())
-                }
-            }
-        }
-
-        analyser.goToRoot()
-    }
-
-    class DiskUsageAnalyser(private val consumeDirectorySize: (Long) -> Unit) {
-
-        private val currentPathSizes = LinkedList<Long>()
-
-        fun goToRoot() {
-            while (currentPathSizes.isNotEmpty()) {
-                goOut()
-            }
-
-            goIn()
-        }
-
-        fun goOut() {
+        val removeLastDir = fun (): Long {
             val currentDirSize = currentPathSizes.removeLast()
+
             if (currentPathSizes.isNotEmpty()) {
                 currentPathSizes[currentPathSizes.lastIndex] += currentDirSize
             }
 
-            consumeDirectorySize(currentDirSize)
+            return currentDirSize
         }
 
-        fun goIn() {
-            currentPathSizes.add(0)
+        consoleRecords.forEach {
+            when (it) {
+                ChangeDirectory.OUT -> yield(removeLastDir())
+                ChangeDirectory.IN -> currentPathSizes.add(0)
+                is Filesize -> currentPathSizes[currentPathSizes.lastIndex] += it.size
+            }
         }
 
-        fun noticeFile(size: Long) {
-            currentPathSizes[currentPathSizes.lastIndex] += size
+        while (currentPathSizes.isNotEmpty()) {
+            yield(removeLastDir())
         }
     }
+
+    private fun Sequence<ConsoleRecord>.calculateFoldersSizes() = calculatingFoldersSizes(this)
 }
+

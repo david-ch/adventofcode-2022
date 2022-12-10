@@ -16,12 +16,12 @@ object Day7 {
     private data class Filesize(val size: Long): ConsoleRecord
 
     fun solvePart1() = folderSizes()
-        .filter { it <= 100000 }
+        .filter { it <= 100_000 }
         .sum()
 
     fun solvePart2(): Long {
-        val totalDiskSize = 70000000
-        val updateRequires = 30000000
+        val totalDiskSize = 70_000_000
+        val updateRequires = 30_000_000
         val spaceToFree = updateRequires + getTotalDiskUsed() - totalDiskSize
 
         return folderSizes()

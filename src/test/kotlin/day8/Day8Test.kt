@@ -9,4 +9,9 @@ class Day8Test {
     fun should_solve_part_1() {
         assertEquals(Day8.solvePart1(), 1792)
     }
+
+    @Test
+    fun should_solve_part_2() {
+        assertEquals(Day8.solvePart2(), 334880)
+    }
 }

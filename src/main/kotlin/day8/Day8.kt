@@ -12,6 +12,41 @@ object Day8 {
         return visibilityMap.flatten().count { it }
     }
 
+    fun solvePart2(): Int {
+        val forest = readForest()
+
+        var bestView = 0
+
+        for (row in 0..forest.lastIndex) {
+            for (col in 0..forest[row].lastIndex) {
+                val right = scanDirectionViewingDistance(col..forest[row].lastIndex) { forest[row][it] }
+                val left = scanDirectionViewingDistance(col downTo 0) { forest[row][it] }
+                val down = scanDirectionViewingDistance(row..forest.lastIndex) { forest[it][col] }
+                val up = scanDirectionViewingDistance(row downTo 0) { forest[it][col] }
+
+                val score = right * left * down * up
+                bestView = bestView.coerceAtLeast(score)
+            }
+        }
+
+        return bestView
+    }
+
+    private fun scanDirectionViewingDistance(range: IntProgression, getTree: (idx: Int) -> Int): Int {
+        val iter = range.iterator()
+        val viewingTreeHeight = getTree(iter.nextInt())
+
+        var count = 0
+        while (iter.hasNext()) {
+            count++
+            if (getTree(iter.nextInt()) >= viewingTreeHeight) {
+                return count
+            }
+        }
+
+        return count
+    }
+
     private fun initVisibilityMap(forest: List<List<Int>>) = Array(forest.size) {
         Array(forest[0].size) { false }
     }

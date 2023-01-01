@@ -19,7 +19,7 @@ object Day10 {
         .map { parseCommand(it) }
         .processUsing(Cpu(x = 1))
         .fold(createScreen()) { screen, cpu ->
-            screen.drawSprite(cpu.x)
+            screen.draw(Sprite(cpu.x))
             screen
         }
         .print()

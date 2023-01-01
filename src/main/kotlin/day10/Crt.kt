@@ -8,8 +8,8 @@ class Crt(private val pixels: List<MutableList<Boolean>>) {
     private var rayPositionRow = 0
     private var rayPositionCol = 0
 
-    fun drawSprite(position: Int) {
-        if (rayPositionCol in position - 1..position + 1) {
+    fun draw(sprite: Sprite) {
+        if (sprite.withinSprite(rayPositionCol)) {
             pixels[rayPositionRow][rayPositionCol] = true
         }
 
@@ -39,4 +39,8 @@ fun createScreen(): Crt {
             MutableList(COLS) { false }
         }
     )
+}
+
+data class Sprite(private val position: Int) {
+    fun withinSprite(col: Int) = col in position - 1..position + 1
 }
